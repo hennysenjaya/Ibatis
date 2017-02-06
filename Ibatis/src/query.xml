@@ -1,0 +1,92 @@
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="region">
+	<!-- Type aliases allow you to use a shorter name for long fully qualified class names. -->
+    <!-- <typeAlias alias="contact" type="com.sample.contact.Contact" /> -->
+    <select id="getMaxTestTrig" resultClass="java.lang.Integer">
+    	
+    </select>
+    <select id="getAll" resultClass="ibatis.RegionBean">
+        	<!-- string query taro di dalam tag select ini
+        		parameter class = class yang mau dikirim dari java ke xml
+        		misalnya kalo kirim String jadi java.lang.String, integer bisa pake int / java.lang.Integer
+        		, kalo bean tulis package bean nya -> kalo ga ada hapus aja
+        		resultclass itu class hasilnya 
+        		
+        		tulis as xxx biar tau mau di mapping ke variabel mana di beannya
+        		kalo sama harusnya ga usa --> 
+            select  region_id as regionId,
+            		region_name as regionName
+            from regions
+            order by region_id
+    </select>
+    <select id="getRegionById" parameterClass="java.lang.Integer" resultClass="java.lang.String">
+    		<!-- buat munculin parameter classnya pake tanda pagar, dalemnya tersera #xxx# 
+    			ga perlu pake as soalnya kan cuma mw ambil 1, tampung ke object -->
+            select  region_name
+            from regions
+            where region_id = #value#
+    </select>
+    <select id="getCountry" parameterClass="ibatis.CountryBean" resultClass="java.lang.String">
+    	<!-- kalo param pake bean, ## nya harus sama kyk nama atribut di bean -->
+    		select country_name
+            from countries
+            where region_id = #regionId#
+            and country_id = #countryId#
+    </select>
+    <select id="getCountryWithMap" parameterClass="java.util.Map" resultClass="java.lang.String">
+    	<!-- kalo param pake map, ## nya harus sama kyk nama key -->
+    		select country_name
+            from countries
+            where region_id = #regionId#
+            and country_id = #countryId#
+    </select>
+    <select id="getCountries" parameterClass="java.util.Map" resultClass="ibatis.CountryBean">
+    	<!-- bisa bkin if else juga -->
+    		select  country_id as countryId,
+    				country_name as countryName
+            from countries
+            where 1=1
+            <dynamic prepend="AND">
+				<isNotNull property="regionId">
+					<isNotEmpty property="regionId">
+						region_id = #regionId#
+					</isNotEmpty>
+				</isNotNull>
+			</dynamic>
+            <dynamic prepend="OR">
+				<isNotNull property="countryId">
+					<isNotEmpty property="countryId">
+						country_id = #countryId#
+					</isNotEmpty>
+				</isNotNull>
+			</dynamic>
+    </select>
+    
+    <!-- iud -> tag nya insert / update / delete -->
+    <insert id="insRegion" parameterClass="ibatis.RegionBean">
+    	insert into regions (region_id,region_name)
+    	values (#regionId#,#regionName#)
+    </insert>
+    <update id="updRegion" parameterClass="ibatis.RegionBean">
+    	update regions set region_name=#regionName#
+    	where region_id=#regionId#
+    </update>
+    <delete id="delRegion" parameterClass="java.lang.Integer">
+    	delete from regions where region_id=#value#
+    </delete>
+    
+    <!-- property ini ngikutin yang di map, bukan yang di SP
+    	buat yang OUT nanti bisa keisi gtu di mapnya jadi procedurenya ga perlu dikasi resultClass
+    	buat yang cursor, parameter out nya jadi java.sql.Resultset -->
+    <parameterMap class="java.util.Map" id="paramMap">
+        <parameter property="countryId" jdbcType="CHAR"
+        javaType="java.lang.String" mode="IN"/>
+    	<parameter property="countryName" jdbcType="VARCHAR"
+        javaType="java.lang.String" mode="OUT"/>
+    </parameterMap>
+    <procedure id="getCountryByProc" parameterMap="paramMap" >
+    	{call get_country(?,?)}
+    </procedure>
+    
+</sqlMap> 
