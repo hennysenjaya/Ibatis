@@ -8,6 +8,14 @@ public class CountryBean implements Serializable{
 	private String regionId;
 	private String editField;
 	
+	private String frmFork;
+	
+	public String getFrmFork() {
+		return frmFork;
+	}
+	public void setFrmFork(String frmFork) {
+		this.frmFork = frmFork;
+	}
 	public String getEdit() {
 		return editField;
 	}
