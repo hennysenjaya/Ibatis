@@ -9,6 +9,7 @@ public class CountryBean implements Serializable{
 	private String editField;
 	
 	private String frmFork;
+	private String isiGit;
 	
 	public String getFrmFork() {
 		return frmFork;
@@ -39,5 +40,11 @@ public class CountryBean implements Serializable{
 	}
 	public void setRegionId(String regionId) {
 		this.regionId = regionId;
+	}
+	public String getIsiGit() {
+		return isiGit;
+	}
+	public void setIsiGit(String isiGit) {
+		this.isiGit = isiGit;
 	}
 }
