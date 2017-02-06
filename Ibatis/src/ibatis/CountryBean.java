@@ -6,13 +6,13 @@ public class CountryBean implements Serializable{
 	private String countryId;
 	private String countryName;
 	private String regionId;
-	private String edit;
+	private String editField;
 	
 	public String getEdit() {
-		return edit;
+		return editField;
 	}
 	public void setEdit(String edit) {
-		this.edit = edit;
+		this.editField = edit;
 	}
 	public String getCountryId() {
 		return countryId;
