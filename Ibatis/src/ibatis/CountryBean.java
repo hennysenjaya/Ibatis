@@ -11,6 +11,14 @@ public class CountryBean implements Serializable{
 	private String frmFork;
 	private String isiGit;
 	
+	private String helloworld;
+	
+	public String getHelloworld() {
+		return helloworld;
+	}
+	public void setHelloworld(String helloworld) {
+		this.helloworld = helloworld;
+	}
 	public String getFrmFork() {
 		return frmFork;
 	}
